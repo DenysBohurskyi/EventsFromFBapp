@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/constraint_event_item_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <!-- <a> circular progressbar xml</a> -->
+
+
+
+    <ImageView
+        android:id="@+id/evPictureImgView"
+        android:layout_width="83dp"
+        android:layout_height="88dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/com_facebook_button_background_color_disabled" />
+
+    <TextView
+        android:id="@+id/evDatePageTV"
+        android:layout_width="221dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="65dp"
+        android:text="Date of event"
+        app:layout_constraintEnd_toStartOf="@+id/arrowForwardImgView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/evPictureImgView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/evNameListTV"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="8dp"
+
+        android:layout_marginStart="20dp"
+        android:text="Event Name"
+        app:layout_constraintBottom_toTopOf="@+id/evDatePageTV"
+        app:layout_constraintEnd_toStartOf="@+id/arrowForwardImgView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/evPictureImgView" />
+
+    <ImageView
+        android:id="@+id/arrowForwardImgView"
+        android:layout_width="15dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:tint="@color/com_facebook_button_background_color_disabled"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/arrow_forward_64px" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="120dp"
+        android:background="@color/com_facebook_button_background_color_focused_disabled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

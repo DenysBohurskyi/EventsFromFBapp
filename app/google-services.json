@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "242260244340",
+    "firebase_url": "https://events-knacky.firebaseio.com",
+    "project_id": "events-knacky",
+    "storage_bucket": "events-knacky.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242260244340:android:81c45d965f5dfd7e",
+        "android_client_info": {
+          "package_name": "com.knacky.events"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242260244340-rf98c03cq8gf1ijpd5dc36lh5ku4899v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.knacky.events",
+            "certificate_hash": "30da21d8abfe85a09593a549dc8a9e9a9676c169"
+          }
+        },
+        {
+          "client_id": "242260244340-khgb8chnh86lgcu39nv4en1agdjrvllp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpCljyLaHrlI1oCOJNTXL0gJ7xG5xORF4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242260244340-khgb8chnh86lgcu39nv4en1agdjrvllp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
