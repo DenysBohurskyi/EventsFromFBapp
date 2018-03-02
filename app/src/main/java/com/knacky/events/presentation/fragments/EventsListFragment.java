@@ -32,8 +32,6 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     CircleProgressbar circleProgressbar;
     @BindView(R.id.eventsListRecycleView)
     RecyclerView recyclerView;
-//    @BindView(R.id.constraint_event_item_layout)
-//    ConstraintLayout constraintEventItemLayout;
 
     EventListFragmentListener onEventListFragmentListener;
 
@@ -41,7 +39,7 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
 
     //onEventListItemClickListener
 
-    public interface EventListFragmentListener {
+    public interface EventListFragmentListener { //clickListener
         void onItemClick(String id);
     }
 

@@ -184,7 +184,7 @@
             app:layout_constraintTop_toBottomOf="@id/logInBtn" />
 
         <com.facebook.login.widget.LoginButton
-            android:id="@+id/sing_in_FB_button"
+            android:id="@+id/sign_in_FB_button"
             android:layout_width="182dp"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
@@ -195,11 +195,11 @@
         <com.shobhitpuri.custombuttons.GoogleSignInButton
             android:id="@+id/sign_in_google_btn"
             android:layout_width="190dp"
-            android:layout_height="35dp"
+            android:layout_height="38dp"
             android:layout_marginTop="6dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent  "
-            app:layout_constraintTop_toBottomOf="@id/sing_in_FB_button">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_in_FB_button">
 
         </com.shobhitpuri.custombuttons.GoogleSignInButton>
 

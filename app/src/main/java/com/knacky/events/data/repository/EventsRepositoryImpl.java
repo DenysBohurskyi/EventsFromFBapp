@@ -70,28 +70,13 @@ public class EventsRepositoryImpl implements EventsRepository {
                     newEvents.remove(j);
                     eventsModel.getEvents().remove(j-1);
 
-
                 } else {
                     Log.v("NameFilter", "NOT EQUALS1: " + "\n" + i + ": " + eventsModel.getEvents().get(i).getName() +
                             "\n" + j + ": " + eventsModel.getEvents().get(j).getName());
                     j++;
                 }
             }
-        }
-//
-//        for (String listName : eventsNamesList) {
-//            for (Event event : eventsModel.getEvents()) {
-//                if (listName == event.getName()) {
-//                    Log.v("NameFilter", "listName = evName");
-//                    eventsModel.getEvents().remove(event);
-//                } else {
-//                    eventsNamesList.add(event.getName());
-//                    Log.v("NameFilter", "listName != evName, ListSize: " + eventsNamesList.size());
-//                }
-//            }
-//        }
-//        List<Event> newEvents = eventsModel.getEvents();
-
+            }
 
         return eventsModel;
     }
