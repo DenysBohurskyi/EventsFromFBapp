@@ -68,7 +68,7 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     private void createCircleProgressBar() {
         circleProgressbar.setVisibility(View.VISIBLE);
         circleProgressbar.setClockwise(true);
-        int animationDuration = 1500; // 2500ms = 2,5s
+        int animationDuration = 2000; // 2500ms = 2,5s
         circleProgressbar.setProgressWithAnimation(0, animationDuration); // Default duration = 1500ms
     }
 

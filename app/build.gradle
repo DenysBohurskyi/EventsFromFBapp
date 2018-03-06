@@ -30,6 +30,7 @@ dependencies {
     //---------------------FireBase---------------------//
     compile 'com.google.firebase:firebase-auth:11.8.0' //for email and password singIn
     compile 'com.google.firebase:firebase-core:11.8.0' //FireBase SDk add
+    compile 'com.google.android.gms:play-services-auth:11.8.0'//for Google Sign In
     compile 'com.firebaseui:firebase-ui-auth:3.2.2'
 
     // Required only if Facebook login support is required
@@ -37,7 +38,8 @@ dependencies {
 
     // Required only if Twitter login support is required   for twitter singIn
     compile("com.twitter.sdk.android:twitter-core:3.0.0@aar") { transitive = true }
-
+    //-------------------CirculImgView------------------//
+    compile 'de.hdodenhof:circleimageview:2.2.0'
     //----------------CircularProgressBar---------------//
     compile 'com.jackandphantom.android:circularprogressbar:1.2.0'
     //--------------------ButterKnife-------------------//

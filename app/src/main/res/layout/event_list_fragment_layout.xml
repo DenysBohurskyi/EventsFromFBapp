@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <com.jackandphantom.circularprogressbar.CircleProgressbar
         android:id="@+id/circleProgressBar"
         android:background="@drawable/event_logo1"
