@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/auth_sign_up_dialog"
+        android:layout_width="300dp"
+        android:layout_height="340dp"
+
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/com_facebook_button_background_color_focused"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/auth__sign_up_dialog_Img"
+            android:layout_width="41dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/unregistred_user_64px"
+            android:backgroundTint="@android:color/darker_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sign_up_dialog_titile"
+            android:layout_width="141dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="14dp"
+            android:text="Registration"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:layout_constraintStart_toEndOf="@+id/auth__sign_up_dialog_Img"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/sign_up_FirstNameEditText"
+            android:layout_width="206dp"
+            android:layout_height="40dp"
+            android:background="@color/custom"
+            android:hint="First Name"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sign_up_dialog_titile"
+            tools:layout_editor_absoluteY="66dp" />
+
+        <EditText
+            android:id="@+id/sign_up_LastName_EditText"
+            android:layout_width="207dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/custom"
+            android:hint="Last Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_FirstNameEditText" />
+
+        <EditText
+            android:id="@+id/sign_up_email_EditText"
+            android:layout_width="207dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/custom"
+            android:hint="email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_LastName_EditText" />
+
+        <EditText
+            android:id="@+id/sign_up_password_EditText"
+            android:layout_width="207dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/custom"
+            android:hint="password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_email_EditText"
+            tools:layout_editor_absoluteY="280dp" />
+
+
+        <LinearLayout
+            android:id="@+id/sign_up_skipLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirmBtn">
+
+            <TextView
+                android:id="@+id/skipTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skip"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/skipImg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/skip_down_arrow_96px"
+                android:backgroundTint="@android:color/holo_blue_bright" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/sign_up_confirmBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Confirm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_password_EditText" />
+
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>
