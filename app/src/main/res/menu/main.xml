@@ -6,6 +6,14 @@
      android:title="acc_icon"
      android:icon="@drawable/add_user_male_48_ico"
      app:showAsAction="always">
-
  </item>
+
+ <item
+     android:id="@+id/chat_item"
+     android:title="acc_icon"
+     android:icon="@drawable/group_message_32"
+     android:iconTint="@color/button_blue"
+     app:showAsAction="always">
+ </item>
+
 </menu>

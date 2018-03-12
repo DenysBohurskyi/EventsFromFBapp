@@ -15,4 +15,5 @@ public interface EventPagePresenter<T> {
     }
     void setEventPageView(T view);
     void getDataFromRealm(String eventId);
+    void openGoogleMap();
 }

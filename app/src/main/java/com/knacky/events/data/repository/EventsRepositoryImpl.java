@@ -27,7 +27,6 @@ public class EventsRepositoryImpl implements EventsRepository {
     Context context;
     int position = 0;
 
-
     EventsModel eventsModel;
     private Subscription graphSubscription;
     private Subscription toBilgEventsSubscription;
@@ -48,16 +47,14 @@ public class EventsRepositoryImpl implements EventsRepository {
         TobilgEventsRetrofit.createEventRetrofit();
 
         return TobilgEventsRetrofit.getTobilgApi()
-                .getEventsFromServer("50.4546600", "30.52380001", "100")
+                .getEventsFromServer("50.4546600", "30.52380001", "500")
                 .observeOn(AndroidSchedulers.mainThread());
 //                .map(it -> eventsMapper(it));
 //                .map(it -> eventsModel = it);
     }
 
     public EventsModel eventsMapper(EventsModel eventsModel) {
-//        List<String> eventsNamesList = new ArrayList<>();
-//        eventsNamesList.add("exampleName");
-//        Log.v("NameFilter", "List size: " + eventsNamesList.size());
+
         List<Event> newEvents = eventsModel.getEvents();
 
         Log.v("NameFilter", "ListSize: " + eventsModel.getEvents().size());
@@ -82,21 +79,6 @@ public class EventsRepositoryImpl implements EventsRepository {
     }
 //    namesUniqFilter(){}
 
-//    public void getEventsNumber(){
-//        TobilgEventsRetrofit.createEventRetrofit();
-//
-//        graphSubscription  =
-//                TobilgEventsRetrofit.getTobilgApi()
-//                .getEventsFromServer("50.4546600","30.52380001", "100")
-//                .subscribeOn(Schedulers.io())
-//
-//                .subscribe(it -> {
-//                            Log.v("Request","toBilg Succeed: " + it.toString() + " " + it.getMetadata().getEventsNumber());
-//
-////                            createEventsRecycleView(it);
-//        },
-//        throwable -> {Log.v("Request","toBilg Failed: " + throwable.toString());});
-//    }
 
     public void createGraphConnection() {
         GraphApiRetrofit.createGraphRetrofit();

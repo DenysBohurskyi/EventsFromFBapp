@@ -1,21 +1,24 @@
 package com.knacky.events.presentation;
 
 
-        import android.app.ActionBar;
-        import android.app.DialogFragment;
-        import android.support.v4.app.Fragment;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.Menu;
-        import android.view.MenuItem;
+import android.app.ActionBar;
+import android.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-        import com.knacky.events.R;
-        import com.knacky.events.presentation.fragments.EventPageFragment;
-        import com.knacky.events.presentation.fragments.EventsListFragment;
-        import com.knacky.events.presentation.fragments.SignInDialogFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.knacky.events.R;
+import com.knacky.events.presentation.fragments.ChatFragment;
+import com.knacky.events.presentation.fragments.EventPageFragment;
+import com.knacky.events.presentation.fragments.EventsListFragment;
+import com.knacky.events.presentation.fragments.SignInDialogFragment;
 
-public class MainActivity extends AppCompatActivity implements EventsListFragment.EventListFragmentListener{
+public class MainActivity extends AppCompatActivity implements EventsListFragment.EventListFragmentListener {
     EventsListFragment eventsListFragment;
     DialogFragment signInDialogFragment;
 
@@ -59,8 +62,13 @@ public class MainActivity extends AppCompatActivity implements EventsListFragmen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.account_item)
+        if (item.getItemId() == R.id.account_item)
             signInDialogFragment.show(getFragmentManager(), "signInDialogFragment");
+        else if (item.getItemId() == R.id.chat_item) {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null)
+                Toast.makeText(this, "First authorize!", Toast.LENGTH_LONG).show();
+            else replaceFragment(new ChatFragment());
+        }
         return super.onOptionsItemSelected(item);
     }
 }

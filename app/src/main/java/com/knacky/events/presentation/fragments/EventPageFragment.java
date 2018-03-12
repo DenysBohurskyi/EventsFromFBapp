@@ -1,5 +1,8 @@
 package com.knacky.events.presentation.fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,8 +64,16 @@ public class EventPageFragment extends Fragment implements EventPagePresenter.Ev
 
         eventId = getArguments().getString("eventId");
         eventPagePresenter.getDataFromRealm(eventId);
+
+        initButtons();
         return view;
     }
+
+    private void initButtons() {
+        eventAdressTV.setOnClickListener(v -> {eventPagePresenter.openGoogleMap();
+        });
+    }
+
 
     @Override
     public void onGetRealmData(RealmResults<RealmEvents> realmResults) {
