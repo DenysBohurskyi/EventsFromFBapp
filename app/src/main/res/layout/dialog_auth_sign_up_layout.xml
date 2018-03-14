@@ -22,7 +22,7 @@
             android:layout_width="41dp"
             android:layout_height="39dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/add_user_male_48_ico"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,52 +32,44 @@
             android:layout_width="141dp"
             android:layout_height="31dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="20dp"
             android:text="Registration"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             app:layout_constraintStart_toEndOf="@+id/auth__sign_up_dialog_Img"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/sign_up_FirstNameEditText"
+            android:id="@+id/sign_up_FirstLastNameEditText"
             android:layout_width="206dp"
             android:layout_height="40dp"
             android:background="@color/custom"
-            android:hint="First Name"
-            android:layout_marginTop="15dp"
+            android:hint="@string/first_last_name_str"
+            android:layout_marginTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sign_up_dialog_titile"
             tools:layout_editor_absoluteY="66dp" />
 
-        <EditText
-            android:id="@+id/sign_up_LastName_EditText"
-            android:layout_width="207dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/custom"
-            android:hint="Last Name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_FirstNameEditText" />
+
+
 
         <EditText
             android:id="@+id/sign_up_email_EditText"
             android:layout_width="207dp"
             android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:background="@color/custom"
             android:hint="email"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_LastName_EditText" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_FirstLastNameEditText" />
 
         <EditText
             android:id="@+id/sign_up_password_EditText"
             android:layout_width="207dp"
             android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:background="@color/custom"
             android:hint="password"
             android:inputType="textPassword"

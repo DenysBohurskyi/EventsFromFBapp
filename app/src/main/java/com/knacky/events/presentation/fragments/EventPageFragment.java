@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.knacky.events.data.entities.realm.RealmEvents;
 import com.knacky.events.data.entities.realm.RealmEventsObject;
 import com.knacky.events.presentation.presenters.EventPagePresenter;
 import com.knacky.events.presentation.presenters.EventPagePresenterImpl;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +54,10 @@ public class EventPageFragment extends Fragment implements EventPagePresenter.Ev
     TextView eventAdressTV;
     @BindView(R.id.evDatePageTV)
     TextView eventDateTV;
+    @BindView(R.id.expand_text_view)
+    ExpandableTextView evDescriptionExpandTV;
+//    @BindView(R.id.evPage_descriptionTV)
+//    TextView eventDescription;
 
     @Nullable
     @Override
@@ -87,9 +94,10 @@ public class EventPageFragment extends Fragment implements EventPagePresenter.Ev
                 .load(realmResults.get(0).getCoverPictureEvent())
                 .into(eventPictureImgView);
 
-        eventNameTV.setText(realmResults.get(0).getNameEvent());
+        eventNameTV.setText(Html.fromHtml(realmResults.get(0).getNameEvent()));
         eventDateTV.setText(realmResults.get(0).getStartTime());
         eventAdressTV.setText(realmResults.get(0).getCity() + ", " + realmResults.get(0).getStreet());
         eventTicketUriTV.setText(realmResults.get(0).getTicketUri());
+        evDescriptionExpandTV.setText(Html.fromHtml("<p><u>" + "Description" + "</u></p>") + realmResults.get(0).getDescription());
     }
 }

@@ -7,4 +7,6 @@
     <color name="colorNice">#e8e8c9</color>
     <color name="custom">#f5fcf2d1</color>
     <color name="button_blue">#bae2ff</color>
+    <color name="between_items">#e2e2e2</color>
+    <color name="black">#000000</color>
 </resources>

@@ -2,4 +2,6 @@
     <string name="app_name">Events</string>
     <string name="facebook_app_id">150285165681187</string>
     <string name="fb_login_protocol_scheme">fb150285165681187</string>
+    <string name="first_last_name_str"><![CDATA[First & Last Name]]></string>
+    <string name="description_str">Description</string>
 </resources>

@@ -188,7 +188,6 @@ public class SignInDialogFragment extends DialogFragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
-
                             Log.d(TAG, "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
                             Toast.makeText(getActivity(), "Authentication succeed," + mAuth.getCurrentUser().getDisplayName(),
                                     Toast.LENGTH_SHORT).show();
@@ -324,7 +323,6 @@ public class SignInDialogFragment extends DialogFragment {
 //        if (LoginManager.getInstance() != null)
             LoginManager.getInstance().logOut();  //fb sign out
     }
-
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
