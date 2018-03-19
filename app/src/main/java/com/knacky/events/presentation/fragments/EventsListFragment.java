@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,11 @@ import com.knacky.events.presentation.MainActivity;
 import com.knacky.events.presentation.adapters.EventListAdapter;
 import com.knacky.events.presentation.presenters.EventsListPresenter;
 import com.knacky.events.presentation.presenters.EventsListPresenterImpl;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +54,14 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_list_fragment_layout, null, false);
+        ButterKnife.bind(this, view);
+//        try {///////////////////////////////////////////
+//            logMethod();
+//        } catch (ParseException e) {
+//           Log.v("CurTime", "exception: ");
+//           e.printStackTrace();
+//        }
 
-        ButterKnife.bind(this,view);
         onEventListFragmentListener = (MainActivity) getActivity();
         //eventListFragmentListener.onItemClick(constraintEventItemLayout.getId());
 
@@ -57,7 +69,7 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
         eventsListPresenter.setEventListView(this);
 
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             createCircleProgressBar();
             eventsListPresenter.uploadEvents();
         }
@@ -86,6 +98,19 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
         recViewAdapter = new EventListAdapter(getContext(), eventsModel, onEventListFragmentListener);
         recyclerView.setAdapter(recViewAdapter);
 
+    }
+
+    private void logMethod() throws ParseException {
+//time after midnight
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        long howMany = 86400000L - (c.getTimeInMillis()-System.currentTimeMillis());
+        Log.v("CurTime", "Current time: " + System.currentTimeMillis());
+        Log.v("CurTime", "timeBeforeMidnight: " + howMany);
     }
 
 }

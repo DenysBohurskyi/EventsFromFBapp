@@ -11,8 +11,9 @@
  <item
      android:id="@+id/chat_item"
      android:title="acc_icon"
-     android:icon="@drawable/group_message_32"
+     android:icon="@drawable/group_message_32_tinted"
      android:iconTint="@color/button_blue"
+
      app:showAsAction="always">
  </item>
 

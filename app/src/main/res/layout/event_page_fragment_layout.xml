@@ -145,6 +145,13 @@
                     android:background="@android:color/transparent"/>
 
             </com.ms.square.android.expandabletextview.ExpandableTextView>
+            <include
+                android:id="@+id/devider1"
+                layout="@layout/between_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/expand_text_view"/>
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
