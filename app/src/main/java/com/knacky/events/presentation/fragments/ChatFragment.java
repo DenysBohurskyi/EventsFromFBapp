@@ -84,7 +84,7 @@ public class ChatFragment extends Fragment {
 
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
                 .setQuery(query, ChatMessage.class)
-                .setLayout(R.layout.message_item)
+
                 .setLifecycleOwner(this)            // important  syka line!!!!!
                 .build();
         Log.v("Chat", "Display Chat< fireBaseOptions done");

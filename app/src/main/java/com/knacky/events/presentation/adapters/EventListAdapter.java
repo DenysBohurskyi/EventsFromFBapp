@@ -61,7 +61,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
         holder.constraintLayout.setTag(position);
         holder.constraintLayout.setOnClickListener(view->
-                onClickListener.onItemClick(eventsModel.getEvents().get(position).getId()));
+                onClickListener.onEventItemClick(eventsModel.getEvents().get(position).getId()));
 
         Log.i("Adapter", "Event ID: " + eventsModel.getEvents().get(position).getId());
 

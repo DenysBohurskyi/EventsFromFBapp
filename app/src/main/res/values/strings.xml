@@ -4,4 +4,9 @@
     <string name="fb_login_protocol_scheme">fb150285165681187</string>
     <string name="first_last_name_str"><![CDATA[First & Last Name]]></string>
     <string name="description_str">Description</string>
+    <string name="permissions_dialog_header">If you sign in via Facebook, this application may need the following user permissions:</string>
+    <string name="perms_dialog_list_of_perms"><p>- user_posts - displays user`s posts as event, with picture of event, description and details of event;\n\n</p>
+                                                <p>- user_events - displays events of users or groups with picture of event, description of event and details ass time, place etc;\n\n</p>
+                                                <p>- user_photos - displays event`s creator photo in EventPageFragment as a detail of event;\n\n</p>
+                                                <p>- read_page_mailboxes - this app uses the user's email in firebase.</p></string>
 </resources>

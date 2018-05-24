@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Enabling multidex support.
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -26,6 +29,8 @@ android {
 }
 
 dependencies {
+    compile 'com.android.support:multidex:1.0.0'
+
     compile 'com.android.support:design:26.1.0'
 
     //---------------------FireBase---------------------//
@@ -39,7 +44,7 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:11.8.0'
 
     // Required only if Facebook login support is required
-    compile ('com.facebook.android:facebook-android-sdk:4.27.0') //for facebook singIn
+    compile ('com.facebook.android:facebook-android-sdk:4.32.0') //for facebook singIn
 
     //---------------------Expandable-------------------//
     compile 'com.ms-square:expandableTextView:0.1.4'  //textView

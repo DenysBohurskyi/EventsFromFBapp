@@ -3,13 +3,14 @@ package com.knacky.events;
 import android.app.Application;
 
 import io.realm.Realm;
+import android.support.multidex.MultiDexApplication;
 import io.realm.RealmConfiguration;
 
 /**
  * Created by knacky on 07.02.2018.
  */
 
-public class EventsApplication extends Application {
+public class EventsApplication extends MultiDexApplication {
     public static EventsApplication eventsApplication;
 
     @Override
@@ -31,4 +32,5 @@ public class EventsApplication extends Application {
 
         Realm.setDefaultConfiguration(realmConfig);
     }
+
 }

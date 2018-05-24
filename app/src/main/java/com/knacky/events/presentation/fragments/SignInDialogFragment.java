@@ -1,11 +1,12 @@
 package com.knacky.events.presentation.fragments;
 
-import android.app.DialogFragment;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,9 +39,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.knacky.events.R;
+import com.knacky.events.presentation.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -70,6 +73,7 @@ public class SignInDialogFragment extends DialogFragment {
     @BindView(R.id.sign_in_FB_button)
     LoginButton signInFBbtn;
 
+    SignInDialogFragmentListener signInDialogFragmentListener;
     SignUpDialogFragment signUpDialogFragment;
     private static final int RC_GOOGLE_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
@@ -78,6 +82,10 @@ public class SignInDialogFragment extends DialogFragment {
     private FirebaseUser user;
 
     private static final String TAG = "SignInDialogFragment";
+
+    public interface SignInDialogFragmentListener {
+        void onLogIn();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,8 +101,11 @@ public class SignInDialogFragment extends DialogFragment {
         View signInFragmentview = inflater.inflate(R.layout.dialog_auth_sign_in_layout, null, false);
         ButterKnife.bind(this, signInFragmentview);
 
+        signInDialogFragmentListener = (MainActivity) getActivity();
+
         signUpDialogFragment = new SignUpDialogFragment();
         signInFBbtn.setFragment(this);      //-----------------------REQUIRED LINE FOR FRAGMENT !!!
+
         // initAuthProviders();
 //        configureFaceBookSignIn();
 //        configureGoogleSignIn();
@@ -118,17 +129,17 @@ public class SignInDialogFragment extends DialogFragment {
 //            configureGoogleSignIn();
         });    //call Sign in with Google
         signInFBbtn.setOnClickListener(v -> {       //FaceBookSignIn button
-            Log.d(TAG, "facebook button");
+            Log.d("SignInDialogFragment", "facebook button");
             configureFaceBookSignIn();
         });
-        skipAuthBtn.setOnClickListener(v -> dismiss());     //skip Authorization
+//        skipAuthBtn.setOnClickListener(v -> dismiss());     //skip Authorization
         signUpNowBtn.setOnClickListener(v -> {      //call Registration form
             dismiss();
             signUpDialogFragment.show(getFragmentManager(), "signUpDialogFragment");
         });
         logInBtn.setOnClickListener(v ->    //Sign in with Email and Password
                 signInWithEmailAndPass(signInEmail.getText().toString(), signInPassword.getText().toString()));
-        this.setCancelable(true);
+        this.setCancelable(false);
     }
 
 
@@ -136,14 +147,14 @@ public class SignInDialogFragment extends DialogFragment {
         // [START initialize_fblogin]
         // Initialize Facebook Login button
         signInFBbtn.setReadPermissions("email", "public_profile");
-        Log.d(TAG, "SetReadPermisions");
+        Log.d("SignInDialogFragment", "SetReadPermisions");
         signInFBbtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                Log.d("SignInDialogFragment", "facebook:onSuccess:" + loginResult);
 
                 AccessToken token = loginResult.getAccessToken();
-                Log.d(TAG, "handleFacebookAccessToken:" + token);
+                Log.d("SignInDialogFragment", "handleFacebookAccessToken:" + token);
 
                 AuthCredential facebookCredential = FacebookAuthProvider.getCredential(token.getToken());
                 signInWithCredential(facebookCredential);           //AUTHENTIFICATION with FaceBook
@@ -152,13 +163,13 @@ public class SignInDialogFragment extends DialogFragment {
             @Override
             public void onCancel() {
                 LoginManager.getInstance().logOut();
-                Log.d(TAG, "facebook:onCancel");
+                Log.d("SignInDialogFragment", "facebook:onCancel");
 //                updateUI(null);
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
+                Log.d("SignInDialogFragment", "facebook:onError", error);
 //                updateUI(null);
             }
         });
@@ -186,18 +197,22 @@ public class SignInDialogFragment extends DialogFragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            Log.d("SignInDialogFragment", "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
-                            Log.d(TAG, "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
+
+
+                            Log.d("SignInDialogFragment", "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
                             Toast.makeText(getActivity(), "Authentication succeed," + mAuth.getCurrentUser().getDisplayName(),
                                     Toast.LENGTH_SHORT).show();
+                            dismiss();
 
-                            //                            updateUI(user);
+                            signInDialogFragmentListener.onLogIn();
+                            //                           updateUI(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Log.d(TAG, "failure, current user: " + mAuth.getCurrentUser());
+                            Log.w("SignInDialogFragment", "signInWithCredential:failure", task.getException());
+                            Log.d("SignInDialogFragment", "failure, current user: " + mAuth.getCurrentUser());
                             Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
                             //                            Snackbar.make(getView().findViewById(R.id.sign_in_dialog_fragment_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             //                            updateUI(null);
@@ -205,8 +220,8 @@ public class SignInDialogFragment extends DialogFragment {
                         }
 
                         // [START_EXCLUDE]
-                        Toast.makeText(getContext(), "Process completed", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Process completed: " + mAuth.getCurrentUser());
+//                        Toast.makeText(getContext(), "Process completed", Toast.LENGTH_SHORT).show();
+                        Log.d("SignInDialogFragment", "Process completed: " + mAuth.getCurrentUser());
 //                        hideProgressDialog();
                         // [END_EXCLUDE]
                     }
@@ -214,7 +229,7 @@ public class SignInDialogFragment extends DialogFragment {
     }
 
     private void signInWithEmailAndPass(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
+        Log.d("SignInDialogFragment", "signIn:" + email);
         if (!validateForm()) {
             return;
         }
@@ -229,14 +244,16 @@ public class SignInDialogFragment extends DialogFragment {
                             // Sign in success, update UI with the signed-in user's information
 
                             user = mAuth.getCurrentUser();
-                            Log.d(TAG, "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
+                            Log.d("SignInDialogFragment", "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
                             Toast.makeText(getActivity(), "Authentication succeed," + mAuth.getCurrentUser().getDisplayName(),
                                     Toast.LENGTH_SHORT).show();
 
+                            dismiss();
+                            signInDialogFragmentListener.onLogIn();
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure\nPlease,try later.", task.getException());
+                            Log.w("SignInDialogFragment", "signInWithEmail:failure\nPlease,try later.", task.getException());
                             Toast.makeText(getActivity(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
@@ -281,7 +298,7 @@ public class SignInDialogFragment extends DialogFragment {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
 
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                Log.d("SignInDialogFragment", "firebaseAuthWithGoogle:" + account.getId());
 
                 Toast.makeText(getContext(), "Starting process...", Toast.LENGTH_LONG).show();
                 //        showProgressDialog();
@@ -290,7 +307,7 @@ public class SignInDialogFragment extends DialogFragment {
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
+                Log.w("SignInDialogFragment", "Google sign in failed", e);
 //                updateUI(null);
             }
         }
@@ -302,34 +319,39 @@ public class SignInDialogFragment extends DialogFragment {
     }
     // [END onactivityresult]
 
-    private void signOut() {
-        Log.i(TAG, "Signing out... ");
+    public void signOut() {
+        Log.i("SignInDialogFragment", "Signing out... ");
+
         // Firebase sign out
-        if (mAuth != null)
+        if (mAuth != null) {
             mAuth.signOut();
 
+            Log.i("SignInDialogFragment", "mAuth sign out.");
+        }
         // Google sign out
         if (mGoogleSignInClient != null) {
             mGoogleSignInClient.signOut().addOnCompleteListener(getActivity(),
                     new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Log.i(TAG, "Google signed out. ");
+                            Log.i("SignInDialogFragment", "Google signed out. ");
 //                        updateUI(null);
                         }
                     });
         }
 //        if (LoginManager.getInstance() != null)
-            LoginManager.getInstance().logOut();  //fb sign out
+        LoginManager.getInstance().logOut();  //fb sign out
     }
+
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getDisplayName() != null)
-            Log.i(TAG, "onDismiss, Current user is: " + mAuth.getCurrentUser().getDisplayName());
+            Log.i("SignInDialogFragment", "onDismiss, Current user is: " + mAuth.getCurrentUser().getDisplayName());
 //        signOut();
 
     }
+
 
     @Override
     public void onCancel(DialogInterface dialog) {

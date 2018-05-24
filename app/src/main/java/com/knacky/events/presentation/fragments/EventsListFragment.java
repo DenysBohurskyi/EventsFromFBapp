@@ -1,5 +1,7 @@
 package com.knacky.events.presentation.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
 import com.knacky.events.R;
@@ -25,6 +28,7 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -36,8 +40,12 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
 
     @BindView(R.id.circleProgressBar)
     CircleProgressbar circleProgressbar;
+
     @BindView(R.id.eventsListRecycleView)
     RecyclerView recyclerView;
+
+    @BindView(R.id.create_event_btn_imgview)
+    ImageView createEventBtn;
 
     EventListFragmentListener onEventListFragmentListener;
 
@@ -46,7 +54,8 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     //onEventListItemClickListener
 
     public interface EventListFragmentListener { //clickListener
-        void onItemClick(String id);
+        void onEventItemClick(String id);
+        void onCreateEventBtnClicked();
     }
 
 
@@ -63,15 +72,17 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
 //        }
 
         onEventListFragmentListener = (MainActivity) getActivity();
-        //eventListFragmentListener.onItemClick(constraintEventItemLayout.getId());
 
         eventsListPresenter = new EventsListPresenterImpl(getContext());
         eventsListPresenter.setEventListView(this);
 
 
         if (savedInstanceState == null) {
+            Log.v("ListFragment", "savedInstanceState is null");
             createCircleProgressBar();
             eventsListPresenter.uploadEvents();
+        } else {
+            Log.v("ListFragment", "savedInstanceState is not null: " + savedInstanceState.toString());
         }
 
         return view;
@@ -79,7 +90,7 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
 
     private void createCircleProgressBar() {
         circleProgressbar.setVisibility(View.VISIBLE);
-        circleProgressbar.setClockwise(true);
+        circleProgressbar.setClockwise(true); //->
         int animationDuration = 2000; // 2500ms = 2,5s
         circleProgressbar.setProgressWithAnimation(0, animationDuration); // Default duration = 1500ms
     }
@@ -100,6 +111,19 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
 
     }
 
+    @OnClick(R.id.create_event_btn_imgview)
+    public void createEventClick(){
+        onEventListFragmentListener.onCreateEventBtnClicked();
+
+//            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+//                    Uri.parse("http://maps.google.com/maps?daddr=" + "краснопольская+1в"));
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+//
+//            getContext().startActivity(intent);
+
+    }
+
     private void logMethod() throws ParseException {
 //time after midnight
         Calendar c = Calendar.getInstance();
@@ -108,7 +132,7 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
-        long howMany = 86400000L - (c.getTimeInMillis()-System.currentTimeMillis());
+        long howMany = 86400000L - (c.getTimeInMillis() - System.currentTimeMillis());
         Log.v("CurTime", "Current time: " + System.currentTimeMillis());
         Log.v("CurTime", "timeBeforeMidnight: " + howMany);
     }

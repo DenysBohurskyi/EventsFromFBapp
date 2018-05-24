@@ -1,10 +1,11 @@
 package com.knacky.events.presentation.fragments;
 
-import android.app.DialogFragment;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +47,8 @@ public class SignUpDialogFragment extends DialogFragment {
     @BindView(R.id.sign_up_skipLayout)
     LinearLayout signUpSkipBtn;
 
+    SignInDialogFragment signInDialogFragment;
+
     private FirebaseAuth mAuth;
 
     private static final String TAG = "SignInDialogFragment";
@@ -55,13 +58,18 @@ public class SignUpDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View signUpFragmentview = inflater.inflate(R.layout.dialog_auth_sign_up_layout, null, false);
         ButterKnife.bind(this, signUpFragmentview);
+
+        signInDialogFragment = new SignInDialogFragment();
         mAuth = FirebaseAuth.getInstance();
         initButton();
         return signUpFragmentview;
     }
 
     private void initButton() {
-        signUpSkipBtn.setOnClickListener(v -> dismiss());
+        signUpSkipBtn.setOnClickListener(v -> {
+            dismiss();
+            signInDialogFragment.show(getFragmentManager(), "signUpDialogFragment");
+        });
         signUpConfirmButtonl.setOnClickListener(v -> createAccount(
                 signUpEmailEditText.getText().toString(),
                 signUpPasswordEditText.getText().toString(),
