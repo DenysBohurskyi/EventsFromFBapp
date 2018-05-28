@@ -6,8 +6,7 @@
 
     <com.jackandphantom.circularprogressbar.CircleProgressbar
         android:id="@+id/circleProgressBarDefault"
-        android:background="@drawable/icon_transparent"
-
+        android:background="@drawable/shapes_progress_icon"
 
         android:layout_width="50dp"
         android:layout_height="50dp"

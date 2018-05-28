@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.knacky.events.R;
+import com.knacky.events.data.repository.FirebaseRepository;
+import com.knacky.events.data.repository.FirebaseRepositoryImpl;
+import com.knacky.events.extensions.Prefs;
 import com.knacky.events.presentation.fragments.ChatFragment;
 import com.knacky.events.presentation.fragments.CreateEventFragment;
 import com.knacky.events.presentation.fragments.EventPageFragment;
@@ -20,14 +23,19 @@ import com.knacky.events.presentation.fragments.EventsListFragment;
 import com.knacky.events.presentation.fragments.PermissionsDialogFragment;
 import com.knacky.events.presentation.fragments.ReportFragment;
 import com.knacky.events.presentation.fragments.SignInDialogFragment;
+import com.knacky.events.presentation.fragments.SignUpDialogFragment;
 import com.knacky.events.presentation.fragments.UserProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements EventsListFragment.EventListFragmentListener,
         SignInDialogFragment.SignInDialogFragmentListener,
-        UserProfileFragment.UserProfileFragmentListener {
+        UserProfileFragment.UserProfileFragmentListener,
+        SignUpDialogFragment.SignUpDialogFragmentListener {
     EventsListFragment eventsListFragment;
     UserProfileFragment userProfileFragment;
     SignInDialogFragment signInDialogFragment;
+    //    FirebaseRepository firebaseRepository;
+
+    public static String NO_IMAGE_AVALIABLE = "https://firebasestorage.googleapis.com/v0/b/events-knacky.appspot.com/o/no_image_available.jpg?alt=media&token=21ac0c1c-d8c9-4f89-907f-3f094370d418";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements EventsListFragmen
         eventsListFragment = new EventsListFragment();
         userProfileFragment = new UserProfileFragment();
         signInDialogFragment = new SignInDialogFragment();
+//        firebaseRepository = new FirebaseRepositoryImpl();
 
-//        (new PermissionsDialogFragment()).show(getSupportFragmentManager(), "signUpDialogFragment");
+        (new PermissionsDialogFragment()).show(getSupportFragmentManager(), "signUpDialogFragment");
         //=======================
 //        replaceFragment(eventsListFragment);
         //=======================
@@ -77,10 +86,7 @@ public class MainActivity extends AppCompatActivity implements EventsListFragmen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.account_item) {
-
-            signInDialogFragment.show(getSupportFragmentManager(), "signInDialogFragment");
-        } else if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             if (item.getItemId() == R.id.settings_menu_item)
                 replaceFragment(new UserProfileFragment());
             if (item.getItemId() == R.id.report_menu_item)
@@ -90,11 +96,13 @@ public class MainActivity extends AppCompatActivity implements EventsListFragmen
             if (item.getItemId() == R.id.account_item)
                 replaceFragment(new UserProfileFragment());
             if (item.getItemId() == R.id.sign_out_menu_item) {
+                Prefs.deleteUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), this);
                 signInDialogFragment.signOut();
                 signInDialogFragment.show(getSupportFragmentManager(), "signInDialogFragment");
-            } else Toast.makeText(this, "First authorize!", Toast.LENGTH_LONG).show();
-
-        }
+            }
+        } else if (item.getItemId() == R.id.account_item) {
+            signInDialogFragment.show(getSupportFragmentManager(), "signInDialogFragment");
+        } else Toast.makeText(this, "First authorize!", Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,8 +117,15 @@ public class MainActivity extends AppCompatActivity implements EventsListFragmen
     }
 
     @Override
+    public void onConfirmClicked() {
+        replaceFragment(userProfileFragment);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 //        signInDialogFragment.signOut();
     }
+
+
 }

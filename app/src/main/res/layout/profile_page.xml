@@ -6,8 +6,10 @@
     android:paddingBottom="15dp"
     android:paddingStart="22dp"
     android:paddingEnd="22dp"
+    android:layout_margin="15dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     >
 
 
@@ -32,7 +34,7 @@
             android:id="@+id/name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="Ім'я"
             android:inputType="textEmailAddress"
 
             android:textSize="16sp" />
@@ -70,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="Password"
+            android:hint="Пароль"
 
             android:textSize="16sp" />
     </android.support.design.widget.TextInputLayout>
@@ -80,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:text="Back to main!"
+        android:text="Перейти до головного меню!"
         android:textSize="16sp"
         android:background="@color/button_blue"
         android:textAllCaps="false"

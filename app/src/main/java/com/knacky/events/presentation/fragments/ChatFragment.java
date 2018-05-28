@@ -40,6 +40,8 @@ public class ChatFragment extends Fragment {
     @BindView(R.id.list_of_messages)
     ListView listOfMessages;
 
+    TextView messageText, messageUser,messageTime;
+
     private FirebaseListAdapter<ChatMessage> adapter;
 
     @Nullable
@@ -47,6 +49,10 @@ public class ChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View chatFragmentView = inflater.inflate(R.layout.chat_room, null, false);
         ButterKnife.bind(this, chatFragmentView);
+         messageText = chatFragmentView.findViewById(R.id.message_text);
+         messageUser = chatFragmentView.findViewById(R.id.message_user);
+         messageTime = chatFragmentView.findViewById(R.id.message_time);
+
         initButtons();
         displayChat();
         return chatFragmentView;
@@ -84,8 +90,8 @@ public class ChatFragment extends Fragment {
 
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
                 .setQuery(query, ChatMessage.class)
-
                 .setLifecycleOwner(this)            // important  syka line!!!!!
+
                 .build();
         Log.v("Chat", "Display Chat< fireBaseOptions done");
 
@@ -95,9 +101,7 @@ public class ChatFragment extends Fragment {
 
                 Log.v("Chat", "Model: " + model.toString() + "\nuser: " + model.getMessageUser());
                 // Get references to the views of message.xml
-                TextView messageText = v.findViewById(R.id.message_text);
-                TextView messageUser = v.findViewById(R.id.message_user);
-                TextView messageTime = v.findViewById(R.id.message_time);
+
 
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser());

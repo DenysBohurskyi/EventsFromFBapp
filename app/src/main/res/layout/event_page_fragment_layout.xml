@@ -17,6 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/evPageMainPict"
+                android:layout_width="match_parent"
+                android:layout_height="199dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/picture_96px" />
+
 
             <ImageView
                 android:id="@+id/clockImgView"
@@ -61,13 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@id/clockImgView"
                 app:srcCompat="@drawable/marker_48px" />
 
-            <ImageView
-                android:id="@+id/evPageMainPict"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/picture_96px" />
+
 
             <TextView
                 android:id="@+id/evPageAdressTV"

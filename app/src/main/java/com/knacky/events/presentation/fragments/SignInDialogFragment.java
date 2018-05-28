@@ -39,6 +39,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.knacky.events.R;
+import com.knacky.events.extensions.Prefs;
 import com.knacky.events.presentation.MainActivity;
 
 import butterknife.BindView;
@@ -76,7 +77,7 @@ public class SignInDialogFragment extends DialogFragment {
     SignInDialogFragmentListener signInDialogFragmentListener;
     SignUpDialogFragment signUpDialogFragment;
     private static final int RC_GOOGLE_SIGN_IN = 9001;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;       //for facebook sign in
     private FirebaseUser user;
@@ -109,7 +110,7 @@ public class SignInDialogFragment extends DialogFragment {
         // initAuthProviders();
 //        configureFaceBookSignIn();
 //        configureGoogleSignIn();
-        mAuth = FirebaseAuth.getInstance();
+
         mCallbackManager = CallbackManager.Factory.create();
         initButtons();
         return signInFragmentview;
@@ -199,7 +200,7 @@ public class SignInDialogFragment extends DialogFragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("SignInDialogFragment", "signInWithCredential:success");
                             user = mAuth.getCurrentUser();
-
+                            Prefs.setUser(mAuth.getCurrentUser().getUid(),getContext()); //save user in SharedPreferences
 
                             Log.d("SignInDialogFragment", "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
                             Toast.makeText(getActivity(), "Authentication succeed," + mAuth.getCurrentUser().getDisplayName(),
@@ -244,6 +245,8 @@ public class SignInDialogFragment extends DialogFragment {
                             // Sign in success, update UI with the signed-in user's information
 
                             user = mAuth.getCurrentUser();
+
+                            Prefs.setUser(mAuth.getCurrentUser().getUid(), getContext());
                             Log.d("SignInDialogFragment", "signInWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
                             Toast.makeText(getActivity(), "Authentication succeed," + mAuth.getCurrentUser().getDisplayName(),
                                     Toast.LENGTH_SHORT).show();
@@ -320,21 +323,22 @@ public class SignInDialogFragment extends DialogFragment {
     // [END onactivityresult]
 
     public void signOut() {
-        Log.i("SignInDialogFragment", "Signing out... ");
+        Log.i("signOut", "Signing out... ");
 
         // Firebase sign out
         if (mAuth != null) {
             mAuth.signOut();
 
-            Log.i("SignInDialogFragment", "mAuth sign out.");
+            Log.i("signOut", "mAuth sign out.");
         }
+        Log.i("signOut", "mAuth: " + mAuth.toString());
         // Google sign out
         if (mGoogleSignInClient != null) {
             mGoogleSignInClient.signOut().addOnCompleteListener(getActivity(),
                     new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Log.i("SignInDialogFragment", "Google signed out. ");
+                            Log.i("signOut", "Google signed out. ");
 //                        updateUI(null);
                         }
                     });

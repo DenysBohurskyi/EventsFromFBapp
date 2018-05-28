@@ -23,6 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.knacky.events.R;
+import com.knacky.events.data.entities.firebase.UserModel;
+import com.knacky.events.data.repository.FirebaseRepository;
+import com.knacky.events.data.repository.FirebaseRepositoryImpl;
+import com.knacky.events.extensions.Prefs;
+import com.knacky.events.presentation.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,23 +52,43 @@ public class SignUpDialogFragment extends DialogFragment {
     @BindView(R.id.sign_up_skipLayout)
     LinearLayout signUpSkipBtn;
 
+//    @BindView(R.id.add_profile_photo_image)
+//    CircleImageView signUpPhotoImg;
+
+    int GALLERY_INTENT_CODE = 1;
+    public static String DEFAULT_USER_IMG_URL = "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg";
+
     SignInDialogFragment signInDialogFragment;
+    FirebaseRepository firebaseRepository;
+    SignUpDialogFragmentListener signUpDialogFragmentListener;
 
     private FirebaseAuth mAuth;
 
     private static final String TAG = "SignInDialogFragment";
+
+    public interface SignUpDialogFragmentListener {
+        void onConfirmClicked();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View signUpFragmentview = inflater.inflate(R.layout.dialog_auth_sign_up_layout, null, false);
         ButterKnife.bind(this, signUpFragmentview);
+        firebaseRepository = new FirebaseRepositoryImpl();
+
+        signUpDialogFragmentListener = (MainActivity) getActivity();
 
         signInDialogFragment = new SignInDialogFragment();
         mAuth = FirebaseAuth.getInstance();
         initButton();
         return signUpFragmentview;
     }
+
+//    @OnClick(R.id.add_profile_photo_image)
+//    public void onAddPhotoClick() {
+//        openGallery();
+//    }
 
     private void initButton() {
         signUpSkipBtn.setOnClickListener(v -> {
@@ -73,11 +98,34 @@ public class SignUpDialogFragment extends DialogFragment {
         signUpConfirmButtonl.setOnClickListener(v -> createAccount(
                 signUpEmailEditText.getText().toString(),
                 signUpPasswordEditText.getText().toString(),
-                signUpFirstNameEditText.getText().toString()))
-        ;
+                signUpFirstNameEditText.getText().toString()));
         this.setCancelable(true);
     }
 
+    //    private void openGallery() {
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//
+//        startActivityForResult(Intent.createChooser(intent, "Select File"), GALLERY_INTENT_CODE);
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == Activity.RESULT_OK) {
+//            if (requestCode == GALLERY_INTENT_CODE && data != null) {
+//                setImageFromUri(data.getData());
+//            }
+//        }
+//    }
+//
+//    public void setImageFromUri(Uri uri) {
+//        signUpPhotoImg.setImageURI(uri);
+//
+//  }
+    //===========================================CreateAccount============================================================
 
     private void createAccount(String email, String password, String lastFirstName) {
         Log.d(TAG, "createAccount:" + email);
@@ -96,7 +144,16 @@ public class SignUpDialogFragment extends DialogFragment {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            Prefs.setUser(mAuth.getCurrentUser().getUid(), getContext());
+
+                            firebaseRepository.setNewUser(new UserModel(email, lastFirstName, DEFAULT_USER_IMG_URL, email),
+                                    getContext()).doOnCompleted(() -> Toast.makeText(getActivity(), "Registration succeed, " + lastFirstName, Toast.LENGTH_SHORT).show());
                             setUserDisplayedName(lastFirstName);
+
+                            Log.d("SignUpDialogFragment", "signUpWithEmail:success, current user is: " + mAuth.getCurrentUser().getDisplayName());
+                            signUpDialogFragmentListener.onConfirmClicked();
+                            dismiss();
+
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -116,6 +173,7 @@ public class SignUpDialogFragment extends DialogFragment {
                 .setDisplayName(dispName).build();
         FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
     }
+    //===========================================END============================================================
 
     private boolean validateForm() {
         boolean valid = true;

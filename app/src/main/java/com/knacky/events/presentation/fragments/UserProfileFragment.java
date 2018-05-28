@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.bumptech.glide.Glide;
 import com.knacky.events.R;
+import com.knacky.events.data.repository.FirebaseRepository;
+import com.knacky.events.data.repository.FirebaseRepositoryImpl;
 import com.knacky.events.presentation.MainActivity;
 import com.knacky.events.presentation.presenters.EventPagePresenterImpl;
 
@@ -33,6 +37,7 @@ public class UserProfileFragment extends Fragment {
     Button backToMainBtn;
 
     UserProfileFragmentListener userProfileFragmentListener;
+    FirebaseRepository firebaseRepository = new FirebaseRepositoryImpl();
 
     public static int GALLERY_INTENT_CODE = 1;
 
@@ -88,6 +93,24 @@ public class UserProfileFragment extends Fragment {
     public void setImageFromUri(Uri uri) {
 //        val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
 //        profilePhotoImg.setImageBitmap(bitmap)
-        profilePhotoImg.setImageURI(uri);
+//        profilePhotoImg.setImageURI(uri);
+
+//        firebaseRepository.uploadFile(uri, "users");
+
+        firebaseRepository.upload(uri, "users").subscribe(photoUrl -> {
+//            profilePhotoImg.setImageURI(it);
+            Glide
+                    .with(getContext())
+                    .load(photoUrl)
+                    .into(profilePhotoImg);
+            Log.d("onImageUpload", "setImage succeed, it: " + photoUrl.toString());
+        }, error -> {
+            Log.d("onImageUpload", "setImage error, it: " + error.toString());
+        });
+//                .doOnSubscribe(()->{
+//            Log.d("onImageUpload", "succeed, it: " );
+//        });
     }
+
 }
+

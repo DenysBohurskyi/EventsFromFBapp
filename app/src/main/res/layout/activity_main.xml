@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background_blurred2"
     tools:context="com.knacky.events.presentation.MainActivity">
-
+    <!--android:background="@drawable/background_blurred2"-->
 
 </LinearLayout>
