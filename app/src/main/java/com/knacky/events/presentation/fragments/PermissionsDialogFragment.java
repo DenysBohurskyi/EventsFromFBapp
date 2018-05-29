@@ -30,7 +30,7 @@ public class PermissionsDialogFragment extends DialogFragment {
     PermissionsDialogFragmentListener permissionsDialogFragmentListener;
 
     public interface PermissionsDialogFragmentListener{
-
+        void onAuthirizedUserLoggedIn();
     }
 
     @Nullable
@@ -38,12 +38,13 @@ public class PermissionsDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View permissionsFragmentview = inflater.inflate(R.layout.dialog_user_permissions, null, false);
         ButterKnife.bind(this, permissionsFragmentview);
-//        permissionsDialogFragmentListener = (MainActivity) getActivity();
+        permissionsDialogFragmentListener = (MainActivity) getActivity();
 
 
         skipPermissionsBtn.setOnClickListener(v -> {
             dismiss();
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                permissionsDialogFragmentListener.onAuthirizedUserLoggedIn();
                 Log.i("SignIn", "Current user is: " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
             } else {

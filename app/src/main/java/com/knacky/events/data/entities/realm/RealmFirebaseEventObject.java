@@ -1,25 +1,14 @@
-package com.knacky.events.data.entities.firebase;
+package com.knacky.events.data.entities.realm;
+
+import io.realm.RealmObject;
 
 /**
- * Created by knacky on 24.05.2018.
+ * Created by knacky on 29.05.2018.
  */
-public class EventModelFirebase {
+
+public class RealmFirebaseEventObject extends RealmObject{
     String crEventImgUri, crEventName, crEventDate, crEventCatecory, crEventDescription, ceEventVenue, author;
 
-    public EventModelFirebase(){
-
-    }
-
-    public EventModelFirebase(String crEventImgUri, String crEventName, String crEventDate, String crEventCatecory,
-                              String crEventDescription, String ceEventVenue, String author) {
-        this.crEventImgUri = crEventImgUri;
-        this.crEventName = crEventName;
-        this.crEventDate = crEventDate;
-        this.crEventCatecory = crEventCatecory;
-        this.crEventDescription = crEventDescription;
-        this.ceEventVenue = ceEventVenue;
-        this.author = author;
-    }
 
     public String getCrEventImgUri() {
         return crEventImgUri;

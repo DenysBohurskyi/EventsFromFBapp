@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="4dp"
+    android:background="@color/between_items">
 
 
     <com.jackandphantom.circularprogressbar.CircleProgressbar
@@ -33,6 +35,46 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <EditText
+        android:id="@+id/search_city_et"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="Київ"
+        android:textSize="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@color/white"
+        android:gravity="center"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintEnd_toStartOf="@id/search_date_btn_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/search_date_btn_tv"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:text="Оберіть дату"
+        android:gravity="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@id/cr_ev_sear_categories_list"
+        app:layout_constraintStart_toStartOf="@id/search_city_et"/>
+
+    <include
+        android:id="@+id/cr_ev_sear_categories_list"
+        layout="@layout/event_category"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/search_date_btn_tv"
+        app:layout_constraintTop_toBottomOf="@id/event_name_input_layout" />
+
     <ImageView
         android:id="@+id/create_event_btn_imgview"
         android:layout_width="60dp"
@@ -50,9 +92,12 @@
         android:id="@+id/eventsListRecycleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-
+        app:layout_constraintTop_toBottomOf="@id/search_date_btn_tv"
         android:layout_weight="1">
 
     </android.support.v7.widget.RecyclerView>

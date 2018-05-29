@@ -29,7 +29,9 @@ import com.knacky.events.presentation.fragments.UserProfileFragment;
 public class MainActivity extends AppCompatActivity implements EventsListFragment.EventListFragmentListener,
         SignInDialogFragment.SignInDialogFragmentListener,
         UserProfileFragment.UserProfileFragmentListener,
-        SignUpDialogFragment.SignUpDialogFragmentListener {
+        SignUpDialogFragment.SignUpDialogFragmentListener,
+        CreateEventFragment.CreateEventFragmentListener,
+        PermissionsDialogFragment.PermissionsDialogFragmentListener{
     EventsListFragment eventsListFragment;
     UserProfileFragment userProfileFragment;
     SignInDialogFragment signInDialogFragment;
@@ -65,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements EventsListFragmen
                 .replace(R.id.ev_container, fragment)
                 .commit();
     }
+
+    @Override
+    public void onEventCreated() {replaceFragment(eventsListFragment);}
+
+    @Override
+    public void onAuthirizedUserLoggedIn() {replaceFragment(eventsListFragment);}
 
     @Override
     public void onEventItemClick(String id) {

@@ -13,11 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.knacky.events.R;
+import com.knacky.events.data.entities.firebase.UserModel;
 import com.knacky.events.data.repository.FirebaseRepository;
 import com.knacky.events.data.repository.FirebaseRepositoryImpl;
+import com.knacky.events.extensions.Prefs;
 import com.knacky.events.presentation.MainActivity;
 import com.knacky.events.presentation.presenters.EventPagePresenterImpl;
 
@@ -33,9 +41,19 @@ public class UserProfileFragment extends Fragment {
     @BindView(R.id.add_profile_photo_image)
     CircleImageView profilePhotoImg;
 
+    @BindView(R.id.name_edit)
+    EditText profileName;
+
+    @BindView(R.id.email_edit)
+    EditText profileEmail;
+
+    @BindView(R.id.pass_edit)
+    EditText profilePass;
+
     @BindView(R.id.back_to_main_btn)
     Button backToMainBtn;
 
+    UserModel userModel;
     UserProfileFragmentListener userProfileFragmentListener;
     FirebaseRepository firebaseRepository = new FirebaseRepositoryImpl();
 
@@ -53,6 +71,9 @@ public class UserProfileFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         userProfileFragmentListener = (MainActivity) getActivity();
+
+        userModel = new UserModel();
+        setFields();
 //        eventPagePresenter = new EventPagePresenterImpl(getContext());
 //        eventPagePresenter.setEventPageView(this);
 
@@ -91,8 +112,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     public void setImageFromUri(Uri uri) {
-//        val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
-//        profilePhotoImg.setImageBitmap(bitmap)
+
 //        profilePhotoImg.setImageURI(uri);
 
 //        firebaseRepository.uploadFile(uri, "users");
@@ -103,6 +123,7 @@ public class UserProfileFragment extends Fragment {
                     .with(getContext())
                     .load(photoUrl)
                     .into(profilePhotoImg);
+
             Log.d("onImageUpload", "setImage succeed, it: " + photoUrl.toString());
         }, error -> {
             Log.d("onImageUpload", "setImage error, it: " + error.toString());
@@ -110,6 +131,34 @@ public class UserProfileFragment extends Fragment {
 //                .doOnSubscribe(()->{
 //            Log.d("onImageUpload", "succeed, it: " );
 //        });
+    }
+
+    private void setFields() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(Prefs.getUser(getContext()));
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        userModel.setProfileImgUrl(dataSnapshot.getValue(UserModel.class).getProfileImgUrl());
+                        userModel.setFullName(dataSnapshot.getValue(UserModel.class).getFullName());
+                        userModel.setEmail(dataSnapshot.getValue(UserModel.class).getEmail());
+                        userModel.setPassword(dataSnapshot.getValue(UserModel.class).getPassword());
+
+                        profileName.setText(userModel.getFullName());
+                        Glide
+                                .with(getContext())
+                                .load(userModel.getProfileImgUrl())
+                                .into(profilePhotoImg);
+
+                        profileEmail.setText(userModel.getEmail());
+                        profilePass.setText(userModel.getPassword());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
     }
 
 }

@@ -146,7 +146,7 @@ public class SignUpDialogFragment extends DialogFragment {
 
                             Prefs.setUser(mAuth.getCurrentUser().getUid(), getContext());
 
-                            firebaseRepository.setNewUser(new UserModel(email, lastFirstName, DEFAULT_USER_IMG_URL, email),
+                            firebaseRepository.setNewUser(new UserModel(lastFirstName, DEFAULT_USER_IMG_URL, email, password),
                                     getContext()).doOnCompleted(() -> Toast.makeText(getActivity(), "Registration succeed, " + lastFirstName, Toast.LENGTH_SHORT).show());
                             setUserDisplayedName(lastFirstName);
 

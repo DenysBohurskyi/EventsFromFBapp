@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.knacky.events.R;
 import com.knacky.events.data.entities.realm.RealmEvents;
 import com.knacky.events.data.entities.realm.RealmEventsObject;
+import com.knacky.events.data.entities.realm.RealmFirebaseEventObject;
 import com.knacky.events.presentation.presenters.EventPagePresenter;
 import com.knacky.events.presentation.presenters.EventPagePresenterImpl;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
@@ -70,7 +71,8 @@ public class EventPageFragment extends Fragment implements EventPagePresenter.Ev
         eventPagePresenter.setEventPageView(this);
 
         eventId = getArguments().getString("eventId");
-        eventPagePresenter.getDataFromRealm(eventId);
+//        eventPagePresenter.getDataFromRealm(eventId);
+        eventPagePresenter.getDataFromRealmFirebase(eventId);
 
         initButtons();
         return view;
@@ -87,11 +89,30 @@ public class EventPageFragment extends Fragment implements EventPagePresenter.Ev
         fillPageFields(realmResults);
     }
 
+    @Override
+    public void onGetRealmDataFirebase(RealmResults<RealmFirebaseEventObject> realmResults) {
+        fillPageFieldsFromFirebase(realmResults);
+    }
+
+    private void fillPageFieldsFromFirebase(RealmResults<RealmFirebaseEventObject> realmResults) {
+        //set event picture
+        Glide
+                .with(getContext())
+                .load(realmResults.get(0).getCrEventImgUri())
+                .into(eventPictureImgView);
+
+        eventNameTV.setText(Html.fromHtml(realmResults.get(0).getCrEventName()));
+        eventTicketUriTV.setText("непотрібні");
+        eventDateTV.setText(realmResults.get(0).getCrEventDate());
+        eventAdressTV.setText(realmResults.get(0).getCeEventVenue());
+        evDescriptionExpandTV.setText(Html.fromHtml("<p><u>" + "Опис" + "</u></p>") + realmResults.get(0).getCrEventDescription());
+    }
+
     private void fillPageFields(RealmResults<RealmEvents> realmResults) {
         //set event picture
         Glide
                 .with(getContext())
-                .load(realmResults.get(0).getCoverPictureEvent())
+                .load(realmResults.get(0).getCoverPictureEvent().toString())
                 .into(eventPictureImgView);
 
         eventNameTV.setText(Html.fromHtml(realmResults.get(0).getNameEvent()));

@@ -4,13 +4,15 @@ package com.knacky.events.data.entities.firebase;
  * Created by knacky on 24.05.2018.
  */
 public class UserModel {
-    String email, fullName, profileImgUrl, provider;
+    String email, fullName, profileImgUrl, password;
 
-    public UserModel(String email, String fullName, String profileImgUrl, String provider) {
+    public UserModel(){}
+
+    public UserModel(String fullName, String profileImgUrl, String email, String password) {
         this.email = email;
         this.fullName = fullName;
         this.profileImgUrl = profileImgUrl;
-        this.provider = provider;
+        this.password = password;
         }
 
     public String getEmail() {
@@ -37,11 +39,11 @@ public class UserModel {
         this.profileImgUrl = profileImgUrl;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getPassword() {
+        return password;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setPassword(String provider) {
+        this.password = password;
     }
 }

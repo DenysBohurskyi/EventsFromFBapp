@@ -53,12 +53,16 @@
             </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:id="@+id/cr_event_date"
-                android:layout_width="match_parent"
+                android:id="@+id/cr_event_date_btn_tv"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/cr_ev_categories_list"
+                android:background="@color/white"
+                android:text="Оберіть дату"
+                android:gravity="center"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@id/cr_ev_categories_list"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/event_name_input_layout" />
@@ -66,15 +70,14 @@
             <include
                 android:id="@+id/cr_ev_categories_list"
                 layout="@layout/event_category"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toEndOf="@id/cr_event_date"
-                app:layout_constraintTop_toBottomOf="@id/event_name_input_layout"
-/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cr_event_date_btn_tv"
+                app:layout_constraintTop_toBottomOf="@id/event_name_input_layout" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/event_description_input_layout"

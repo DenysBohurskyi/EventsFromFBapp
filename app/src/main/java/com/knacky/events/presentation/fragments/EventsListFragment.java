@@ -1,7 +1,5 @@
 package com.knacky.events.presentation.fragments;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,24 +9,40 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jackandphantom.circularprogressbar.CircleProgressbar;
 import com.knacky.events.R;
 import com.knacky.events.data.entities.events.EventsModel;
+import com.knacky.events.data.entities.firebase.EventModelFirebase;
+import com.knacky.events.data.entities.realm.RealmFirebaseEventObject;
+import com.knacky.events.data.entities.realm.RealmFirebaseEventsList;
+import com.knacky.events.extensions.Categories;
 import com.knacky.events.presentation.MainActivity;
 import com.knacky.events.presentation.adapters.EventListAdapter;
+import com.knacky.events.presentation.adapters.FirebaseEventListAdapter;
 import com.knacky.events.presentation.presenters.EventsListPresenter;
 import com.knacky.events.presentation.presenters.EventsListPresenterImpl;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import rx.Completable;
 
 
 /**
@@ -47,14 +61,23 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     @BindView(R.id.create_event_btn_imgview)
     ImageView createEventBtn;
 
+    @BindView(R.id.event_categories_root)
+    Spinner searchEventCategory;
+
     EventListFragmentListener onEventListFragmentListener;
 
+    private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     private RecyclerView.Adapter recViewAdapter;
+
+    private DatabaseReference databaseReference;
+    private FirebaseDatabase database;
+    private List<EventModelFirebase> resultEventsList;
 
     //onEventListItemClickListener
 
     public interface EventListFragmentListener { //clickListener
         void onEventItemClick(String id);
+
         void onCreateEventBtnClicked();
     }
 
@@ -64,26 +87,26 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.event_list_fragment_layout, null, false);
         ButterKnife.bind(this, view);
-//        try {///////////////////////////////////////////
-//            logMethod();
-//        } catch (ParseException e) {
-//           Log.v("CurTime", "exception: ");
-//           e.printStackTrace();
-//        }
 
         onEventListFragmentListener = (MainActivity) getActivity();
-
         eventsListPresenter = new EventsListPresenterImpl(getContext());
         eventsListPresenter.setEventListView(this);
 
+        resultEventsList = new ArrayList<>();
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("Events");
 
-        if (savedInstanceState == null) {
-            Log.v("ListFragment", "savedInstanceState is null");
-            createCircleProgressBar();
-            eventsListPresenter.uploadEvents();
-        } else {
-            Log.v("ListFragment", "savedInstanceState is not null: " + savedInstanceState.toString());
-        }
+        initFirebaceRecycleView();
+        initCategoriesAdapter();
+//        displayEvents();
+
+//        if (savedInstanceState == null) {
+//            Log.v("ListFragment", "savedInstanceState is null");
+//            createCircleProgressBar();
+//            eventsListPresenter.uploadEvents();
+//        } else {
+//            Log.v("ListFragment", "savedInstanceState is not null: " + savedInstanceState.toString());
+//        }
 
         return view;
     }
@@ -112,7 +135,7 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
     }
 
     @OnClick(R.id.create_event_btn_imgview)
-    public void createEventClick(){
+    public void createEventClick() {
         onEventListFragmentListener.onCreateEventBtnClicked();
 
 //            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
@@ -123,6 +146,136 @@ public class EventsListFragment extends Fragment implements EventsListPresenter.
 //            getContext().startActivity(intent);
 
     }
+
+    public void initFirebaceRecycleView() {
+
+        //=====================================================================================
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recViewAdapter = new FirebaseEventListAdapter(getContext(), resultEventsList, onEventListFragmentListener);
+        recyclerView.setAdapter(recViewAdapter);
+
+        //=====================================================================================
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                resultEventsList.add(dataSnapshot.getValue(EventModelFirebase.class));
+                recViewAdapter.notifyDataSetChanged();
+                fillEventsDB(dataSnapshot.getValue(EventModelFirebase.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public Completable fillEventsDB(EventModelFirebase eventModelFirebase) {
+
+        RealmFirebaseEventObject realmEventsObject;
+        RealmFirebaseEventsList realmFirebaseEventsList;
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+//mainObj
+        realmEventsObject = realm.createObject(RealmFirebaseEventObject.class);
+
+        //delete WeatherObj from RealmDb
+        realm.delete(RealmFirebaseEventsList.class);
+//        Log.v("realm", "Number of events: " + evModel.getMetadata().getEventsNumber());
+
+        for (int i = 0; i < resultEventsList.size() - 1; i++) {
+//subObj
+            realmFirebaseEventsList = realm.createObject(RealmFirebaseEventsList.class);
+
+            realmEventsObject.setCrEventImgUri(eventModelFirebase.getCrEventImgUri());
+            realmEventsObject.setCrEventName(eventModelFirebase.getCrEventName());
+            realmEventsObject.setCrEventCatecory(eventModelFirebase.getCrEventCatecory());
+            realmEventsObject.setCrEventDate(eventModelFirebase.getCrEventDate());
+            realmEventsObject.setCrEventDescription(eventModelFirebase.getCrEventDescription());
+            realmEventsObject.setCeEventVenue(eventModelFirebase.getCeEventVenue());
+            realmEventsObject.setAuthor(eventModelFirebase.getAuthor());
+
+            realmFirebaseEventsList.getEvents().add(realmEventsObject);
+        }
+
+        realm.commitTransaction();
+        return Completable.complete();
+    }
+
+    public void initCategoriesAdapter() {
+        // адаптер
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, Categories.searchEventCategories);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        searchEventCategory.setAdapter(adapter);
+        // заголовок
+        searchEventCategory.setPrompt(getResources().getString(R.string.event_categories));
+        // выделяем элемент
+        searchEventCategory.setSelection(0);
+        // устанавливаем обработчик нажатия
+        searchEventCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+//                if (position != 0)
+//                    eventModelFirebase.setCrEventCatecory(searchEventCategory.getSelectedItem().toString());
+                // показываем позиция нажатого элемента
+//                Toast.makeText(getContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
+    }
+//    public void displayEvents() {
+////Suppose you want to retrieve "chats" in your Firebase DB:
+//        Query query = FirebaseDatabase.getInstance().getReference().child("Events");
+//
+//        FirebaseListOptions<EventModelFirebase> options = new FirebaseListOptions.Builder<EventModelFirebase>()
+//                .setQuery(query, EventModelFirebase.class)
+//                .setLifecycleOwner(this)            // important  syka line!!!!!
+//                .setLayout(R.layout.eventlist_item_layout)
+//                .build();
+//        Log.v("Chat", "Display Chat< fireBaseOptions done");
+//
+//        adapter = new FirebaseListAdapter<ChatMessage>(options) {
+//            @Override
+//            protected void populateView(View v, ChatMessage model, int position) {
+//
+//                Log.v("Chat", "Model: " + model.toString() + "\nuser: " + model.getMessageUser());
+//                // Get references to the views of message.xml
+//                TextView messageText = v.findViewById(R.id.message_text);
+//                TextView messageUser = v.findViewById(R.id.message_user);
+//                TextView messageTime = v.findViewById(R.id.message_time);
+//
+//                messageText.setText(model.getMessageText());
+//                messageUser.setText(model.getMessageUser());
+//                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getMessageTime()));
+//            }
+//        };
+//        listOfMessages.setAdapter(adapter);
+//    }
 
     private void logMethod() throws ParseException {
 //time after midnight
